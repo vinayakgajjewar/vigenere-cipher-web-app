@@ -13,8 +13,26 @@ function generateKey(text, key) {
   return newKey;
 }
 
+function sanitize(input) {
+  lowercase = input.toLowerCase();
+
+  noSymbols = "";
+  alpha = "abcdefghijklmnopqrstuvwxyz";
+  for (i = 0; i < lowercase.length; i++) {
+    for (j = 0; j < alpha.length; j++) {
+      if (lowercase.charAt(i) == alpha.charAt(j)) {
+        noSymbols += lowercase.charAt(i);
+        break;
+      }
+    }
+  }
+
+  return noSymbols;
+}
+
 function encrypt(plaintext, key) {
-  newKey = generateKey(plaintext, key);
+  newKey = sanitize(generateKey(plaintext, key));
+  plaintext = sanitize(plaintext);
 
   ciphertext = "";
   for (i = 0; i < plaintext.length; i++) {
@@ -27,7 +45,8 @@ function encrypt(plaintext, key) {
 }
 
 function decrypt(ciphertext, key) {
-  newKey = generateKey(ciphertext, key);
+  newKey = sanitize(generateKey(ciphertext, key));
+  ciphertext = sanitize(ciphertext);
 
   plaintext = "";
   for (i = 0; i < ciphertext.length; i++) {
@@ -53,4 +72,5 @@ $(document).ready(function() {
     $("#output").text(decrypt(ciphertext, key));
     //console.log(decrypt(ciphertext, key));
   });
+
 });
